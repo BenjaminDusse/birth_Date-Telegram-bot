@@ -26,3 +26,4 @@ now_day, now_month = datetime_now.day, datetime_now.month
 birth_day_today = Profile.objects.filter(dob__day=now_day, dob__month=now_month)
 print(birth_day_today)
 # birth_day_tomorrow = Profile.objects.filter(dob__day=tomorrow_day, dob__month=tomorrow_month)
+

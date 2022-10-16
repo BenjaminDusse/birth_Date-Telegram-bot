@@ -75,7 +75,11 @@ class UserState:
 
 def check_user(chat_id, tg_user_id):
     user = db_utils.get_user(chat_id)
-    # send_happy_birthday_message(user, chat_id, user.lang)
+    datetime_now = timezone.now()
+    now_day, now_month = datetime_now.day, datetime_now.month
+    birth_day_users = TelegramUser.objects.filter(dob__day=now_day, dob__month=now_month)
+    for b_user in birth_day_users:
+        send_happy_birthday_message(b_user, chat_id, b_user.lang)
     if not user:
         db_utils.create_user(chat_id, tg_user_id)
         send_welcome(chat_id)
@@ -88,7 +92,9 @@ def check_user(chat_id, tg_user_id):
         send_notify(chat_id, user.phone_number, user.lang)
     elif user.is_verified:
         send_main_menu(user)
-    # elif user.birth_date:
+    elif not user.dob:
+        print("No date of birth")
+
         # send_happy_birthday_message(user, chat_id, user.lang)
     else:
         send_error(chat_id)
@@ -149,10 +155,16 @@ def send_no_content(chat_id, lang):
 
 
 def send_happy_birthday_message(user, chat_id, lang):
-    datetime_now = timezone.now()
-    now_day, now_month = datetime_now.day, datetime_now.month
+        bot.send_message(
+            chat_id, const.SEND_HAPPY_BIRTHDAY[lang],
+        )
+        bot.set_state(chat_id, UserState.birth_date)
+#     datetime_now = timezone.now()
+#     now_day, now_month = datetime_now.day, datetime_now.month
 
-    birth_day_users = TelegramUser.objects.filter()
+#     birth_day_users = TelegramUser.objects.filter(dob__day=now_day, dob__month=now_month)
+#     for b_user in birth_day_users:
+
     #     bot.send_message(
     #         chat_id, const.SEND_HSEND_HAPPY_BIRTHDAY[lang], const.ASK_BIRTH_DATE_MSG[lang])
     #     bot.set_state(chat_id, UserState.birth_date)

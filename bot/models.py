@@ -31,6 +31,6 @@ class TelegramUser(models.Model):
     is_verified = models.BooleanField(default=False)
     code = models.CharField(max_length=12, null=True, blank=True)
     send_message_type = models.CharField(max_length=25, choices=CONTACT_TYPE, null=True, blank=True)
-    dob = models.DateTimeField(auto_now_add=True)
+    dob = models.DateTimeField(null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
